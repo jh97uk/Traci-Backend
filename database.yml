@@ -1,0 +1,14 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    container_name: "traci-postgres"
+    restart: always
+    ports:
+      - "54320:5432"
+    environment:
+      POSTGRES_USER: traci
+      POSTGRES_PASSWORD: tracie
