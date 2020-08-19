@@ -1,19 +1,29 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const {Sequelize, TIME} = require("sequelize");
 const Schema = require('./ValidationSchema.js');
+const Database = require('./DatabaseSchema.js');
+const { Sequelize } = require('sequelize');
 
 const port = 4000;
-const sequelize = new Sequelize("postgres://traci:tracie@localhost:54320/traci");
-app.use(bodyParser.json());
 
-app.post ('/', function(request, response){
-    var validation = Schema.phoneNumber.validate(request.query);
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
+
+
+app.post ('/customer/entry', function(request, response){
+    var validation = Schema.phoneNumber.validate(request.body);
     if(validation.error){
         throw new Error(validation.error.message);
     }
-    response.send({status:request.query});
+    Database.Tables.Customers.create({
+        phoneNumber:request.body.number,
+        entryTimestamp: new Date().getTime()
+    })
+    response.send({message:'success'});
 });
 
 app.use(function(error, request, response, next){
