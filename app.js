@@ -30,7 +30,7 @@ app.post ('/customer/entry', function(request, response){
                 phoneNumber:request.body.number,
                 entryTimestamp: new Date().getTime()
             }).then(function(test){
-                response.send({message:'success'});
+                response.send({message:'success', type:'entry'});
             })
         } else{
             Database.Tables.Customers.update({departureTimestamp:new Date().getTime()}, {
@@ -39,7 +39,7 @@ app.post ('/customer/entry', function(request, response){
                     departureTimestamp:null
                 }
             }).then(function(){
-                response.send({message:'success'});
+                response.send({message:'success', type:'departure'});
             })
         }
     })
