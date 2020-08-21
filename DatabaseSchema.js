@@ -21,6 +21,25 @@ var Tables = {
         'departureTimestamp':{
             type:Sequelize.DATE
         }
+    }),
+    Users: sequelize.define('users', {
+        'id':{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement:true
+        },
+        'username':{
+            type:DataTypes.STRING,
+            max:20,
+            min:2,
+            allowNull:false
+        },
+        'password':{
+            type:DataTypes.STRING,
+            max:120,
+            min:20,
+            allowNull:false
+        }
     })
 }
 

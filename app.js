@@ -4,14 +4,22 @@ const bodyParser = require('body-parser');
 const app = express();
 const Schema = require('./ValidationSchema.js');
 const Database = require('./DatabaseSchema.js');
+const jwt = require('./helper/jwt.js');
+const errorHandler = require('./helper/ErrorHandler.js');
 const { Sequelize } = require('sequelize');
 const { date } = require('@hapi/joi');
 
 const port = 4000;
 
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+app.use(jwt());
+
+app.use('/users', require('./service/User.js'));
+
+app.use(errorHandler);
 
 app.post ('/customer/entry', function(request, response){
     var validation = Schema.phoneNumber.validate(request.body);
