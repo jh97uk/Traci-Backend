@@ -12,10 +12,10 @@ class User{
         return userWithoutPassword;
     }
 
-    static async giveTokenForUser({username, password}){
-        const user = {id:0, usernmae:'admin', password:'123'};
-    
-        if(username == user.username && password == user.password)
+    static async giveTokenForUser(username, password){
+        const user = {id:0, username:'admin', password:'123'};
+        
+        if(username != user.username && password != user.password)
             throw 'Invalid username or password';
     
         const token = jwt.sign({
@@ -31,7 +31,7 @@ class User{
     }
 
     static authenticate(request, response, next){
-        User.giveTokenForUser(request.body)
+        User.giveTokenForUser(request.body.username, request.body.password)
             .then(user=>response.json(user))
             .catch(next);
     }
