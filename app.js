@@ -21,12 +21,20 @@ app.use('/users', require('./service/User.js'));
 
 app.use(errorHandler);
 
-app.post ('/customer/entry', function(request, response){
-    var validation = Schema.phoneNumber.validate(request.body);
-    if(validation.error){
-        throw new Error(validation.error.message);
-    }
+var isThisLocalhost = function (req){
+    var ip = req.connection.remoteAddress;
+    var host = req.get('host');
+    return ip === "127.0.0.1" || ip === "::ffff:127.0.0.1" || ip === "::1" || host.indexOf("localhost") !== -1;
+}
 
+app.post ('/customer/entry', function(request, response){
+    if(!isThisLocalhost)
+        throw new Error("This request can only be performed by the kiosk its hosted on!")
+    
+    var validation = Schema.phoneNumber.validate(request.body);
+    if(validation.error)
+        throw new Error(validation.error.message);
+    
     Database.Tables.Customers.count({
         where:{
             phoneNumber: request.body.number,
