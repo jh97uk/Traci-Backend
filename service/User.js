@@ -4,8 +4,6 @@ const express = require('express');
 const router = express.Router();
 const Database = require('../DatabaseSchema.js');
 
-
-
 class User{
     static omitUserPassword(user){
         const {password, ...userWithoutPassword} = user;
@@ -19,15 +17,19 @@ class User{
             throw 'Invalid username or password';
     
         const token = jwt.sign({
-            sub:user.id
+            id:user.id,
+            username:user.username,
         },
         config.secret,
         {expiresIn:'1d'});
-    
         return {
             ...User.omitUserPassword(user),
             token
         }
+    }
+
+    static async getCurrent(request, response, next){
+        response.json({"token":jwt.verify(request.headers.authorization.split(" ")[1], config.secret)});
     }
 
     static authenticate(request, response, next){
@@ -38,4 +40,5 @@ class User{
 }
 
 router.post('/authenticate', User.authenticate)
+router.get('/current', User.getCurrent);
 module.exports = router;
