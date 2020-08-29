@@ -3,6 +3,7 @@ const router = express.Router();
 const Schema = require('../ValidationSchema.js');
 const Database = require('../DatabaseSchema.js');
 const { Sequelize } = require('sequelize');
+const { response } = require("express");
 
 var isThisLocalhost = function (req){
     var ip = req.connection.remoteAddress;
@@ -11,8 +12,10 @@ var isThisLocalhost = function (req){
 }
 
 class Customer{
-    static getAll(){
-
+    static getAll(request, response){
+        Database.Tables.Customers.findAll().then(function(data){
+            response.send(data)
+        })
     }
     
     static new(request, response){
