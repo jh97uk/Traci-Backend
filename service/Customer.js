@@ -14,7 +14,7 @@ var isThisLocalhost = function (req){
 class Customer{
     static getAll(request, response){
         Database.Tables.Customers.findAll().then(function(data){
-            response.send(data)
+            response.send(data);
         })
     }
     
@@ -51,8 +51,19 @@ class Customer{
             }
         })
     }
+
+    static patchDeparture(request, response){
+        Database.Tables.Customers.update({departureTimestamp:new Date(Date.parse(request.body.departureTimestamp)).getTime()}, {
+            where:{
+                id:parseInt(request.params.id)
+            }
+        }).then(function(test){
+            response.send({message:'success'});
+        })
+    }
 }
 
 router.get('/', Customer.getAll)
 router.post("/entry", Customer.new);
+router.patch('/:id', Customer.patchDeparture)
 module.exports = router;
