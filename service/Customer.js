@@ -13,7 +13,10 @@ var isThisLocalhost = function (req){
 
 class Customer{
     static getAll(request, response){
-        Database.Tables.Customers.findAll().then(function(data){
+        let options = {};
+        if(request.params.id)
+            options = {where:{id:request.params.id}}
+        Database.Tables.Customers.findAll(options).then(function(data){
             response.send(data);
         })
     }
@@ -63,7 +66,7 @@ class Customer{
     }
 }
 
-router.get('/', Customer.getAll)
+router.get('/:id?', Customer.getAll)
 router.post("/entry", Customer.new);
 router.patch('/:id', Customer.patchDeparture)
 module.exports = router;
