@@ -3,6 +3,7 @@ const router = express.Router();
 const Schema = require('../ValidationSchema.js');
 const Database = require('../DatabaseSchema.js');
 const { Sequelize } = require('sequelize');
+const Op = Sequelize.Op;
 const { response } = require("express");
 
 var isThisLocalhost = function (req){
@@ -16,6 +17,12 @@ class Customer{
         let options = {};
         if(request.params.id)
             options = {where:{id:request.params.id}}
+            else if(request.params.number)
+                options = {where:{
+                        phoneNumber:{
+                            [Op.like]: '%'+request.params.number+'%'
+                        }
+                    }}
         Database.Tables.Customers.findAll(options).then(function(data){
             response.send(data);
         })
@@ -67,6 +74,7 @@ class Customer{
 }
 
 router.get('/:id?', Customer.getAll)
+router.get('/search/:number?', Customer.getAll)
 router.post("/entry", Customer.new);
 router.patch('/:id', Customer.patchDeparture)
 module.exports = router;
