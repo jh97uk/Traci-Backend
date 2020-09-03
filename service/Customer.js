@@ -21,8 +21,20 @@ class Customer{
                 options = {where:{
                         phoneNumber:{
                             [Op.like]: '%'+request.params.number+'%'
-                        }
+                        },
+                    
                     }}
+        
+        if(request.params.startDate && request.params.endDate)
+            options['where'] = {...options.where, ...{
+                entryTimestamp:{
+                    [Op.between]: [request.params.startDate, request.params.endDate] 
+                },
+                departureTimestamp:{
+                    [Op.ne]: null,
+                    [Op.between]: [request.params.startDate, request.params.endDate] 
+                }
+            }}
         Database.Tables.Customers.findAll(options).then(function(data){
             response.send(data);
         })
@@ -73,8 +85,9 @@ class Customer{
     }
 }
 
-router.get('/:id?', Customer.getAll)
 router.get('/search/:number?', Customer.getAll)
+router.get('/:id?', Customer.getAll)
+
 router.post("/entry", Customer.new);
 router.patch('/:id', Customer.patchDeparture)
 module.exports = router;
