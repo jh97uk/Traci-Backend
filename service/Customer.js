@@ -28,11 +28,11 @@ class Customer{
         if(request.query.startDate && request.query.endDate)
             options['where'] = {...options.where, ...{
                 entryTimestamp:{
-                    [Op.between]: [request.query.startDate, request.query.endDate] 
+                    [Op.gte]: request.query.startDate
                 },
                 departureTimestamp:{
                     [Op.ne]: null,
-                    [Op.between]: [request.query.startDate, request.query.endDate] 
+                    [Op.lte]: request.query.endDate
                 }
             }}
         Database.Tables.Customers.findAll(options).then(function(data){
