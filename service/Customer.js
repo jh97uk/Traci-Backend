@@ -55,12 +55,22 @@ class Customer{
             }
         }).then(function(customerWithNumberCount){
             if(customerWithNumberCount == 0){
-                Database.Tables.Customers.create({
-                    phoneNumber:request.body.number,
-                    entryTimestamp: new Date().getTime()
-                }).then(function(test){
-                    response.send({message:'success', type:'entry'});
-                })
+                if(request.body.entryTimestamp && request.body.departureTimestamp){
+                    Database.Tables.Customers.create({
+                        phoneNumber:request.body.number,
+                        entryTimestamp: request.body.entryTimestamp,
+                        departureTimestamp: request.body.departureTimestamp
+                    }).then(function(test){
+                        response.send({message:'success', type:'entry'});
+                    })
+                } else{
+                    Database.Tables.Customers.create({
+                        phoneNumber:request.body.number,
+                        entryTimestamp: new Date().getTime()
+                    }).then(function(test){
+                        response.send({message:'success', type:'entry'});
+                    })
+                }
             } else{
                 Database.Tables.Customers.update({departureTimestamp:new Date().getTime()}, {
                     where:{
