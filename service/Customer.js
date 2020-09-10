@@ -60,8 +60,8 @@ class Customer{
                         phoneNumber:request.body.number,
                         entryTimestamp: request.body.entryTimestamp,
                         departureTimestamp: request.body.departureTimestamp
-                    }).then(function(test){
-                        response.send({message:'success', type:'entry'});
+                    }).then(function(data){
+                        response.send({message:'success', type:'entry', entry:data.dataValues});
                     })
                 } else{
                     Database.Tables.Customers.create({
