@@ -1,10 +1,12 @@
 const { valid } = require('@hapi/joi');
 
-const Joi = require('@hapi/joi').extend(require('joi-phone-number'));
+const Joi = require('@hapi/joi').extend(require('joi-phone-number'), require('@hapi/joi-date'));
 
 const validate = {
     phoneNumber:Joi.object({
-        number:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'})
+        number:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'}),
+        entryTimestamp:Joi.date(),
+        departureTimestamp:Joi.date()
     })
 }
 
