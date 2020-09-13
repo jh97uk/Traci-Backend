@@ -93,6 +93,12 @@ class Customer{
             response.send({message:'success'});
         })
     }
+
+    static deleteEntry(request, response){
+        Database.Tables.Customers.destroy({where:{id:request.params.id}}).then(function(test){
+            response.send({message:'success'});
+        })
+    }
 }
 
 router.get('/search/:number?', Customer.getAll)
@@ -100,4 +106,5 @@ router.get('/:id?', Customer.getAll)
 
 router.post("/entry", Customer.new);
 router.patch('/:id', Customer.patchDeparture)
+router.delete('/:id', Customer.deleteEntry);
 module.exports = router;
