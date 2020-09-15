@@ -84,8 +84,8 @@ class Customer{
         })
     }
 
-    static patchDeparture(request, response){
-        Database.Tables.Customers.update({departureTimestamp:new Date(Date.parse(request.body.departureTimestamp)).getTime()}, {
+    static patch(request, response){
+        Database.Tables.Customers.update(request.body, {
             where:{
                 id:parseInt(request.params.id)
             }
@@ -105,6 +105,6 @@ router.get('/search/:number?', Customer.getAll)
 router.get('/:id?', Customer.getAll)
 
 router.post("/entry", Customer.new);
-router.patch('/:id', Customer.patchDeparture)
+router.patch('/:id', Customer.patch)
 router.delete('/:id', Customer.deleteEntry);
 module.exports = router;
