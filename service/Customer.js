@@ -88,9 +88,10 @@ class Customer{
         Database.Tables.Customers.update(request.body, {
             where:{
                 id:parseInt(request.params.id)
-            }
+            },
+            returning:true
         }).then(function(test){
-            response.send({message:'success'});
+            response.send({message:'success', entry:test[1][0].dataValues});
         })
     }
 
