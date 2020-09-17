@@ -7,6 +7,12 @@ const validate = {
         number:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'}),
         entryTimestamp:Joi.date(),
         departureTimestamp:Joi.date()
+    }),
+
+    Customer:Joi.object({
+        phoneNumber:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'}),
+        entryTimestamp:Joi.date(),
+        departureTimestamp:Joi.date()
     })
 }
 

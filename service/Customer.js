@@ -85,6 +85,9 @@ class Customer{
     }
 
     static patch(request, response){
+        var validation = Schema.Customer.validate(request.body);
+        if(validation.error)
+            throw new Error(validation.error.message);
         Database.Tables.Customers.update(request.body, {
             where:{
                 id:parseInt(request.params.id)
