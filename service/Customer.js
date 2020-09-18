@@ -14,9 +14,9 @@ var isThisLocalhost = function (req){
 
 class Customer{
     static getAll(request, response){
-        let options = {};
+        let options = {limit:5};
         if(request.params.id)
-            options = {where:{id:request.params.id}}
+            options = {where:{id:request.params.id}, limit:5}
             else if(request.params.number)
                 options = {where:{
                         phoneNumber:{
@@ -35,6 +35,10 @@ class Customer{
                     [Op.lte]: request.query.endDate
                 }
             }}
+        
+        if(request.query.offset)
+            options['offset'] = request.query.offset;
+            
         Database.Tables.Customers.findAll(options).then(function(data){
             response.send(data);
         })
