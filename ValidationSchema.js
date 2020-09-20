@@ -10,9 +10,18 @@ const validate = {
     }),
 
     Customer:Joi.object({
+        id:Joi.number(),
         phoneNumber:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'}),
         entryTimestamp:Joi.date(),
         departureTimestamp:Joi.date()
+    }),
+    
+    CustomerSearch: Joi.object({
+        id:Joi.number(),
+        number:Joi.string().phoneNumber({defaultCountry: 'GB', format: 'international'}),
+        startDate:Joi.date(),
+        endDate:Joi.date(),
+        offset:Joi.number()
     })
 }
 

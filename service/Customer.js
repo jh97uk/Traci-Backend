@@ -5,6 +5,7 @@ const Database = require('../DatabaseSchema.js');
 const { Sequelize } = require('sequelize');
 const Op = Sequelize.Op;
 const { response } = require("express");
+const Joi = require("@hapi/joi");
 
 var isThisLocalhost = function (req){
     var ip = req.connection.remoteAddress;
@@ -15,6 +16,9 @@ var isThisLocalhost = function (req){
 class Customer{
     static getAll(request, response){
         let options = {limit:5};
+        const validation = Schema.CustomerSearch.validate(request.params);
+        if(validation.error)
+            throw new Error(validation.error.message);
         if(request.params.id)
             options = {where:{id:request.params.id}, limit:5}
             else if(request.params.number)
@@ -103,6 +107,10 @@ class Customer{
     }
 
     static deleteEntry(request, response){
+        const validation = Joi.number().validate(request.params.id);
+        if(validation.error)
+            throw new Error(validation.error.message);
+
         Database.Tables.Customers.destroy({where:{id:request.params.id}}).then(function(test){
             response.send({message:'success'});
         })
