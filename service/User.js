@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 const Database = require('../DatabaseSchema.js');
+const editJsonFile = require("edit-json-file");
 
 class User{
     static omitUserPassword(user){
@@ -37,8 +38,16 @@ class User{
             .then(user=>response.json(user))
             .catch(next);
     }
+
+    static async setPassword(request, response, next){
+        let configJsonFile = editJsonFile(`${__dirname}/../config.json`);
+        configJsonFile.set('dashboardPassword', request.body.password);
+        configJsonFile.save();
+        response.send({message:'success'});
+    }
 }
 
 router.post('/authenticate', User.authenticate)
+router.patch('/', User.setPassword)
 router.get('/current', User.getCurrent);
 module.exports = router;
