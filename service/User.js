@@ -11,7 +11,7 @@ class User{
     }
 
     static async giveTokenForUser(username, password){
-        const user = {id:0, username:'admin', password:'123'};
+        const user = {id:0, username:'admin', password:config.dashboardPassword};
         
         if(username != user.username && password != user.password)
             throw 'Invalid username or password';
