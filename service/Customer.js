@@ -107,13 +107,23 @@ class Customer{
     }
 
     static deleteEntry(request, response){
-        const validation = Joi.number().validate(request.params.id);
-        if(validation.error)
-            throw new Error(validation.error.message);
-
-        Database.Tables.Customers.destroy({where:{id:request.params.id}}).then(function(test){
-            response.send({message:'success'});
-        })
+        if(request.params.id != null || request.params.id != undefined){
+            const validation = Joi.number().validate(request.params.id);
+            if(validation.error)
+                throw new Error(validation.error.message);
+    
+            Database.Tables.Customers.destroy({where:{id:request.params.id}}).then(function(result){
+                response.send({message:'success'});
+            })
+        } else{
+            Database.Tables.Customers.destroy({
+                where:{},
+                truncate:true
+            }).then(function(result){
+                response.send({message:'success'});
+            })
+        }
+        
     }
 }
 
@@ -122,5 +132,6 @@ router.get('/:id?', Customer.getAll)
 
 router.post("/entry", Customer.new);
 router.patch('/:id', Customer.patch)
+router.delete("/", Customer.deleteEntry);
 router.delete('/:id', Customer.deleteEntry);
 module.exports = router;
