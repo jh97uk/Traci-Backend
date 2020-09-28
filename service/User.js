@@ -2,9 +2,9 @@ const config = require('../config.json');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const Database = require('../DatabaseSchema.js');
-const editJsonFile = require("edit-json-file");
+const Joi = require('@hapi/joi')
 
+const editJsonFile = require("edit-json-file");
 class User{
     static omitUserPassword(user){
         const {password, ...userWithoutPassword} = user;
@@ -39,7 +39,11 @@ class User{
             .catch(next);
     }
 
-    static async setPassword(request, response, next){
+    static setPassword(request, response, next){
+        const validation = Joi.string().min(18).max(50).label("Password").validate(request.body.password);
+        if(validation.error)
+            throw new Error(validation.error.message);
+
         let configJsonFile = editJsonFile(`${__dirname}/../config.json`);
         configJsonFile.set('dashboardPassword', request.body.password);
         configJsonFile.save();
