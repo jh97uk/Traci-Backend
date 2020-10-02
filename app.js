@@ -39,6 +39,7 @@ app.use(function(request, response, next){
 })
 
 app.use(errorHandler);
+app.use('/kiosk', require('./service/Kiosk.js'));
 app.use('/users', require('./service/User.js'));
 app.use('/customer', require('./service/Customer.js'))
 app.use('/setup', require('./service/Setup.js'));

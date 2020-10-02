@@ -8,7 +8,7 @@ function jwt(){
         path:[
             '/users/authenticate',
             '/customer/entry',
-            '/setup'
+            '/kiosk'
         ]
     })
 }
