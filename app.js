@@ -4,15 +4,15 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const errorHandler = require('./helper/ErrorHandler.js');
-const SetupHelper = require('./service/Setup.js');
-const jwt = require('./helper/jwt.js');
+const Setup = require('./service/Setup.js');
 const editJsonFile = require("edit-json-file");
 
 const port = 4000;
 let authMiddlewarePresent = false;
 const configJsonFile = editJsonFile(`${__dirname}/config.json`);
 if(Object.keys(configJsonFile.data).length == 0){
-    SetupHelper.initConfig(configJsonFile);
+    configJsonFile.set('secret', Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2));
+    configJsonFile.save();
 }
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -30,6 +30,7 @@ app.use(function(request, response, next){
     } else{
         if(!authMiddlewarePresent){
             authMiddlewarePresent = true;
+            const jwt = require('./helper/jwt.js');
             app.use(jwt());
         }
         
