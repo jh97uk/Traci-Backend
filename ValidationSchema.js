@@ -22,6 +22,11 @@ const validate = {
         startDate:Joi.date(),
         endDate:Joi.date(),
         offset:Joi.number()
+    }),
+
+    Establishment: Joi.object({
+        establishmentName: Joi.string().min(2).max(100).label("Name"),
+        establishmentMessage: Joi.string().min(2).max(350).label("Message"),
     })
 }
 
